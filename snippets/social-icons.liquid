@@ -1,0 +1,167 @@
+{% comment %}
+  Renders social icons.
+  Accepts:
+  - class: {String} a class to be added to the <ul> element (optional).
+
+  Usage:
+  {% render 'social-icons',
+    class: 'my-class'
+  %}
+{% endcomment %}
+
+<ul class="list-social list-unstyled" role="list">
+  {%- if settings.social_facebook_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_facebook_link }}" class="link list-social__link" aria-label="Facebook" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-facebook.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Facebook</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_instagram_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_instagram_link }}" class="link list-social__link" aria-label="Instagram" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-instagram.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Instagram</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_tiktok_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_tiktok_link }}" class="link list-social__link" aria-label="TikTok" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-tiktok.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">TikTok</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_bluesky_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_bluesky_link }}" class="link list-social__link" aria-label="Bluesky" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-bluesky.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Bluesky</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_twitter_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_twitter_link }}" class="link list-social__link" aria-label="X" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-x.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">X</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_youtube_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_youtube_link }}" class="link list-social__link" aria-label="YouTube" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-youtube.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">YouTube</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_vimeo_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_vimeo_link }}" class="link list-social__link" aria-label="Vimeo" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-vimeo.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Vimeo</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_snapchat_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_snapchat_link }}" class="link list-social__link" aria-label="Snapchat" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-snapchat.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Snapchat</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_reddit_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_reddit_link }}" class="link list-social__link" aria-label="Reddit" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-reddit.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Reddit</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_twitch_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_twitch_link }}" class="link list-social__link" aria-label="Twitch" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-twitch.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Twitch</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_kick_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_kick_link }}" class="link list-social__link" aria-label="Kick" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-kick.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Kick</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_spotify_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_spotify_link }}" class="link list-social__link" aria-label="Spotify" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-spotify.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Spotify</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_apple_music_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_apple_music_link }}" class="link list-social__link" aria-label="Apple Music" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-apple-music.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Apple Music</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_soundcloud_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_soundcloud_link }}" class="link list-social__link" aria-label="SoundCloud" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-soundcloud.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">SoundCloud</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_patreon_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_patreon_link }}" class="link list-social__link" aria-label="Patreon" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-patreon.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Patreon</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_discord_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_discord_link }}" class="link list-social__link" aria-label="Discord" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-discord.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Discord</span>
+    </a>
+  </li>
+  {%- endif -%}
+
+  {%- if settings.social_website_link != blank -%}
+  <li class="list-social__item">
+    <a href="{{ settings.social_website_link }}" class="link list-social__link" aria-label="Website" target="_blank" rel="noopener">
+      <span class="svg-wrapper">{{ 'icon-globe.svg' | inline_asset_content }}</span>
+      <span class="visually-hidden">Website</span>
+    </a>
+  </li>
+  {%- endif -%}
+</ul>
+
+

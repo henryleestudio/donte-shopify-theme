@@ -1,0 +1,246 @@
+{% comment %}
+  Site Audio with FA mute/unmute and hover volume slider
+{% endcomment %}
+
+{% if section.settings.enabled and section.settings.audio_url != blank %}
+  <!-- Font Awesome (icon CSS). If your CSP blocks this, swap to inline SVGs. -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <div id="site-audio-root" class="site-audio-controls" style="position:fixed; right:1rem; bottom:40px; z-index:50;">
+    <audio id="site-audio"
+           preload="auto"
+           src="{{ section.settings.audio_url | escape }}"
+           playsinline
+           loop
+           muted>
+    </audio>
+
+    <div class="site-audio-ui" style="position:relative; display:flex; align-items:center; gap:.5rem;">
+      <!-- Volume slider (hidden until hover/focus-within) -->
+      <div class="site-volume" aria-hidden="true">
+        <input id="site-audio-volume"
+               type="range"
+               min="0" max="100" step="1"
+               value="{{ section.settings.volume }}"
+               aria-label="Volume"
+               />
+      </div>
+
+      <!-- Mute/Unmute toggle -->
+      <button id="site-audio-toggle"
+              type="button"
+              class="site-audio-btn"
+              aria-pressed="false"
+              aria-label="Unmute and play"
+              title="Unmute">
+        <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <style>
+    /* 1) Make the slider touch the button (no gap) */
+    #site-audio-root .site-volume {
+    position: absolute;
+    margin-right: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+    background: #fff;
+    padding: 10px;
+    right: 30px;
+    border: 1px solid var(--color-foreground, #222);
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    min-width: 110px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    }
+
+    /* 2) Enlarge the hover zone with an invisible buffer extending left */
+    #site-audio-root .site-audio-ui { position: relative; }
+    #site-audio-root .site-audio-ui::before {
+    content: "";
+    position: absolute;
+    right: 0;              /* start at the button’s right edge */
+    top: -16px;
+    bottom: -16px;
+    width: 220px;          /* widen to cover slider area + a little extra */
+    pointer-events: none;  /* don’t block slider interactions */
+    }
+
+    /* Keep slider open when hovering anywhere in the UI OR the slider itself */
+    #site-audio-root .site-audio-ui:hover .site-volume,
+    #site-audio-root .site-audio-ui:focus-within .site-volume,
+    #site-audio-root .site-volume:hover {
+    opacity: 1;
+    pointer-events: auto;
+    }
+
+    #site-audio-root .site-audio-btn {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:42px; height:42px;
+      border-radius:9999px; border:1px solid var(--color-foreground, #222);
+      background: #fff
+      color: #222;
+      cursor:pointer;
+      transition: transform .12s ease, background .2s ease;
+      z-index: 2;
+    }
+    #site-audio-root .site-audio-btn:hover { transform: scale(1.06); }
+    #site-audio-root .site-audio-btn:active { transform: scale(0.98); }
+
+    /* Reveal on hover or keyboard focus */
+    #site-audio-root .site-audio-ui:hover .site-volume,
+    #site-audio-root .site-audio-ui:focus-within .site-volume {
+      opacity:1; pointer-events:auto;
+    }
+
+    #site-audio-root input[type="range"] {
+      width:100%;
+      -webkit-appearance: none; appearance: none; background: transparent;
+      margin-bottom: 0 !important;
+    }
+    /* Track */
+    #site-audio-root input[type="range"]::-webkit-slider-runnable-track {
+      height:4px; background: currentColor; opacity:.25; border-radius:2px;
+    }
+    #site-audio-root input[type="range"]::-moz-range-track {
+      height:4px; background: currentColor; opacity:.25; border-radius:2px;
+    }
+    /* Thumb */
+    #site-audio-root input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance:none; appearance:none; width:14px; height:14px;
+      border-radius:50%; background: currentColor; margin-top:-5px;
+    }
+    #site-audio-root input[type="range"]::-moz-range-thumb {
+      width:14px; height:14px; border:none; border-radius:50%; background: currentColor;
+    }
+    /* Inherit theme color */
+    #site-audio-root { color: var(--color-foreground, #222); }
+  </style>
+
+  <script>
+    (() => {
+    const audio  = document.getElementById('site-audio');
+    const btn    = document.getElementById('site-audio-toggle');
+    const slider = document.getElementById('site-audio-volume');
+    if (!audio || !btn || !slider) return;
+
+    const KEY_ENABLED = 'siteAudioEnabled'; // '1' if user unmuted previously
+    const KEY_VOL     = 'siteAudioVol';     // last volume (0..1)
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+
+    // Init volume from storage or section setting (0..1)
+    const rawStored    = localStorage.getItem(KEY_VOL);
+    const hasStoredVol = rawStored !== null && rawStored !== '' && !Number.isNaN(parseFloat(rawStored));
+    const defaultVol   = {{ section.settings.volume | divided_by: 100.0 | json }};
+    const initialVol   = hasStoredVol ? clamp(parseFloat(rawStored), 0, 1) : clamp(defaultVol, 0, 1);
+
+    audio.volume = initialVol;
+    slider.value = Math.round(initialVol * 100);
+    if (!hasStoredVol) localStorage.setItem(KEY_VOL, String(initialVol));
+
+    // Start muted (HTML has muted attr); we’ll unmute on first real gesture.
+    audio.muted = true;
+    let started = false;
+
+    const setIcon = () => {
+        const isMuted = audio.muted || audio.volume === 0;
+        btn.setAttribute('aria-pressed', String(!isMuted));
+        btn.setAttribute('aria-label', isMuted ? 'Unmute and play' : 'Mute');
+        btn.title = isMuted ? 'Unmute' : 'Mute';
+        btn.innerHTML = isMuted
+        ? '<i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>'
+        : (audio.volume < 0.5
+            ? '<i class="fa-solid fa-volume-low" aria-hidden="true"></i>'
+            : '<i class="fa-solid fa-volume-high" aria-hidden="true"></i>');
+    };
+
+    // --- Play audibly on the very first user gesture anywhere (capture phase) ---
+    const firstGesture = async () => {
+        try {
+        audio.muted = false;
+        audio.removeAttribute('muted'); // avoid sticky muted in Safari
+        await audio.play();             // runs in the gesture call stack
+        started = true;
+        localStorage.setItem(KEY_ENABLED, '1'); // remember preference
+        } catch (e) {
+        // If blocked, re-mute and user can click the button
+        audio.muted = true;
+        // console.debug('Audio play blocked on first gesture:', e);
+        }
+        setIcon();
+        removeFirstGestureListeners();
+    };
+
+    const addFirstGestureListeners = () => {
+        const optsCapPassive = { once: true, capture: true, passive: true };
+        const optsCap        = { once: true, capture: true };
+        window.addEventListener('pointerdown', firstGesture, optsCapPassive);
+        window.addEventListener('touchstart',  firstGesture, optsCapPassive);
+        window.addEventListener('mousedown',   firstGesture, optsCapPassive);
+        window.addEventListener('keydown',     firstGesture, optsCap);
+    };
+    const removeFirstGestureListeners = () => {
+        window.removeEventListener('pointerdown', firstGesture, true);
+        window.removeEventListener('touchstart',  firstGesture, true);
+        window.removeEventListener('mousedown',   firstGesture, true);
+        window.removeEventListener('keydown',     firstGesture, true);
+    };
+    addFirstGestureListeners();
+    // ---------------------------------------------------------------------------
+
+    // Button: toggle mute; if it’s the first time, start playback unmuted
+    const toggleMutePlay = async () => {
+        if (audio.muted) {
+        audio.muted = false;
+        audio.removeAttribute('muted');
+        try {
+            if (!started) { await audio.play(); started = true; }
+            localStorage.setItem(KEY_ENABLED, '1');
+        } catch {
+            audio.muted = true;
+        }
+        } else {
+        audio.muted = true;             // keep stream alive for instant unmute later
+        localStorage.setItem(KEY_ENABLED, '0');
+        }
+        setIcon();
+    };
+    btn.addEventListener('click', toggleMutePlay);
+
+    // Volume slider
+    const onVol = () => {
+        const v = clamp((parseInt(slider.value || '0', 10) / 100), 0, 1);
+        audio.volume = v;
+        localStorage.setItem(KEY_VOL, String(v));
+        setIcon();
+    };
+    slider.addEventListener('input', onVol);
+    slider.addEventListener('change', onVol);
+
+    audio.addEventListener('volumechange', setIcon);
+    setIcon();
+
+    // Optional: log load errors to catch broken URLs on share-preview
+    audio.addEventListener('error', () => {
+        // console.warn('Audio failed to load. Check the file URL in Settings → Files.');
+    });
+    })();
+</script>
+
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Site audio",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Enable site audio", "default": false },
+    { "type": "text", "id": "audio_url", "label": "Audio file URL (mp3/ogg)", "info": "Upload your file in Settings → Files and paste the URL here." },
+    { "type": "range", "id": "volume", "label": "Default volume", "min": 0, "max": 100, "step": 1, "default": 50 }
+  ],
+  "presets": [{ "name": "Site audio" }]
+}
+{% endschema %}

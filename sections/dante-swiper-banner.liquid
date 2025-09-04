@@ -1,0 +1,752 @@
+{% comment %}
+  Section: Dante Swiper Banner
+  A customizable slider powered by Swiper.js
+{% endcomment %}
+
+<!-- Load Swiper CSS and JS -->
+<link rel="stylesheet" href="{{ 'swiper-bundle.min.css' | asset_url }}" type="text/css">
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+
+<div
+  id="shopify-section-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  class="dante-swiper-banner"
+>
+  <div
+    class="swiper-container swiper-{{ section.id }}"
+    style="
+      --swiper-margin-top: {{ section.settings.margin_top | default: 0 }}rem;
+      --swiper-margin-bottom: {{ section.settings.margin_bottom | default: 0 }}rem;
+      --swiper-margin-left: {{ section.settings.margin_left | default: 0 }}rem;
+      --swiper-margin-right: {{ section.settings.margin_right | default: 0 }}rem;
+    "
+  >
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide" style="overflow: hidden;">
+          {% if block.settings.media_type == 'image' %}
+            {% if block.settings.image_desktop or block.settings.image_mobile %}
+              <picture>
+                {% if block.settings.image_mobile %}
+                  <source media="(max-width: 749px)" srcset="{{ block.settings.image_mobile | image_url }}">
+                {% endif %}
+                {% if block.settings.image_desktop %}
+                  <img
+                    style="border-radius: {{ section.settings.slide_radius | default: 0 }}px;"
+                    src="{{ block.settings.image_desktop | image_url }}"
+                    alt="{{ block.settings.title_text | default: 'Slide image' }}"
+                    loading="lazy"
+                    width="100%"
+                    height="auto"
+                  >
+                {% endif %}
+              </picture>
+            {% else %}
+              {{ 'hero-apparel-1' | placeholder_svg_tag }}
+            {% endif %}
+          {% elsif block.settings.media_type == 'video' %}
+            {% if block.settings.video_file or block.settings.video_file_mobile %}
+
+              {% if block.settings.video_file %}
+                <video
+                  class="dante-video dante-video--desktop"
+                  {% if block.settings.video_autoplay %} autoplay muted playsinline loop {% endif %}
+                  {% if block.settings.video_controls %} controls {% endif %}
+                  style="width:100%; height:auto; border-radius: {{ section.settings.slide_radius }}px;"
+                >
+                  <source src="{{ block.settings.video_file.sources[1].url | asset_url }}" type="video/mp4">
+                </video>
+              {% endif %}
+
+              {% if block.settings.video_file_mobile %}
+                <video
+                  class="dante-video dante-video--mobile"
+                  {% if block.settings.video_autoplay %} autoplay muted playsinline loop {% endif %}
+                  {% if block.settings.video_controls %} controls {% endif %}
+                  style="width:100%; height:auto; border-radius: {{ section.settings.slide_radius }}px;"
+                >
+                  <source src="{{ block.settings.video_file_mobile.sources[1].url | asset_url }}" type="video/mp4">
+                </video>
+              {% endif %}
+
+            {% else %}
+              {{ 'hero-apparel-1' | placeholder_svg_tag }}
+            {% endif %}
+
+          {% endif %}
+
+          {% if block.settings.title_text or block.settings.subtitle_text or block.settings.button_text %}
+            <div class="slide-overlay position-{{ block.settings.position }} mobile-position-{{ block.settings.position_mobile }}">
+              <div class="overlay-content">
+                {% if block.settings.title_text != blank %}
+                  <h2
+                    class="slide-title"
+                    style="
+                      color: {{ block.settings.heading_color }};
+                      --heading-font-size: {{ block.settings.heading_font_size | default: 5 }}rem;
+                      text-align: {{ block.settings.heading_align | default: 'center' }};
+                      line-height: {{ block.settings.heading_line_height | default: 1.2 }};
+                      margin-top: {{ block.settings.heading_margin_top | default: 0 }}px;
+                      margin-bottom: {{ block.settings.heading_margin_bottom | default: 0 }}px;
+                    "
+                  >
+                    {{ block.settings.title_text | newline_to_br }}
+                  </h2>
+                {% endif %}
+
+                {% if block.settings.subtitle_text != blank %}
+                  <p
+                    class="slide-subtitle"
+                    style="
+                      color: {{ block.settings.subtitle_color }};
+                      --subtitle-font-size: {{ block.settings.subtitle_font_size | default: 1.5 }}rem;
+                      text-align: {{ block.settings.subtitle_align | default: 'center' }};
+                      line-height: {{ block.settings.subtitle_line_height | default: 1.4 }};
+                      margin-top: {{ block.settings.subtitle_margin_top | default: 0 }}px;
+                      margin-bottom: {{ block.settings.subtitle_margin_bottom | default: 0 }}px;
+                    "
+                  >
+                    {{ block.settings.subtitle_text | newline_to_br }}
+                  </p>
+                {% endif %}
+
+                {% if block.settings.button_text != blank and block.settings.button_url != blank %}
+                  <div style="text-align: {{ block.settings.button_align | default: 'center' }};">
+                    <a
+                      href="{{ block.settings.button_url }}"
+                      class="btn slide-btn"
+                      style="
+                      --btn-bg: {{ block.settings.button_bg_color }};
+                      --btn-fg: {{ block.settings.button_text_color }};
+                      --button-font-size: {{ block.settings.button_font_size | default: 1 }}rem;
+                      margin-top: {{ block.settings.button_margin_top | default: 0 }}px;
+                      margin-bottom: {{ block.settings.button_margin_bottom | default: 0 }}px;
+                      ">
+
+                      <span class="btn-label">{{ block.settings.button_text }}</span>
+                      <i class="fa-solid fa-arrow-right btn-arrow" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.pagination_enable %}
+      <div class="swiper-pagination swiper-{{ section.id }}-pagination"></div>
+    {% endif %}
+    {% if section.settings.navigation_enable %}
+      <div class="swiper-button-prev swiper-{{ section.id }}-prev"></div>
+      <div class="swiper-button-next swiper-{{ section.id }}-next"></div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var swiperOptions = {
+      effect:      "{{ section.settings.transition | default: 'slide' }}",
+      speed:       {{ section.settings.timing     | default: 500 }},
+      autoHeight:  false,
+      loop:        true,
+      slidesPerView: 1,
+      spaceBetween:  50
+    };
+
+    {% if section.settings.autoplay %}
+      swiperOptions.autoplay = { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true };
+    {% endif %}
+
+    {% if section.settings.pagination_enable %}
+      swiperOptions.pagination = {
+        el: ".swiper-{{ section.id }}-pagination",
+        clickable: true
+      };
+    {% endif %}
+    {% if section.settings.navigation_enable %}
+      swiperOptions.navigation = {
+        nextEl: ".swiper-{{ section.id }}-next",
+        prevEl: ".swiper-{{ section.id }}-prev"
+      };
+    {% endif %}
+
+    var swiper = new Swiper(".swiper-{{ section.id }}", swiperOptions);
+
+    // Fallback: manually stop/start on hover if needed
+    {% if section.settings.autoplay %}
+      (function(){
+        var el = document.querySelector(".swiper-{{ section.id }}");
+        if (!el || !swiper || !swiper.autoplay) return;
+
+        // If pauseOnMouseEnter isn't available in this build, do it manually
+        var hasNativePause = swiper.params && swiper.params.autoplay && ('pauseOnMouseEnter' in swiper.params.autoplay);
+
+        if (!hasNativePause) {
+          var stop = function(){ try{ swiper.autoplay.stop(); }catch(e){} };
+          var start = function(){ try{ swiper.autoplay.start(); }catch(e){} };
+          el.addEventListener('mouseenter', stop);
+          el.addEventListener('mouseleave', start);
+          // pointer events help on some trackpads
+          el.addEventListener('pointerenter', stop);
+          el.addEventListener('pointerleave', start);
+        }
+      })();
+    {% endif %}
+  });
+</script>
+
+<style>
+  .swiper-container {
+    position: relative;
+  }
+  .swiper-container {
+    margin-top: var(--swiper-margin-top);
+    margin-bottom: var(--swiper-margin-bottom);
+    margin-left: var(--swiper-margin-left);
+    margin-right: var(--swiper-margin-right);
+  }
+  .slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+  .slide-overlay.position-top-left {
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .slide-overlay.position-top-center {
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+  }
+  .slide-overlay.position-top-right {
+    justify-content: flex-end;
+    align-items: flex-start;
+    text-align: right;
+  }
+  .slide-overlay.position-middle-left {
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+  }
+  .slide-overlay.position-middle-center {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .slide-overlay.position-middle-right {
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+  }
+  .slide-overlay.position-bottom-left {
+    justify-content: flex-start;
+    align-items: flex-end;
+    text-align: left;
+  }
+  .slide-overlay.position-bottom-center {
+    justify-content: center;
+    align-items: flex-end;
+    text-align: center;
+  }
+  .slide-overlay.position-bottom-right {
+    justify-content: flex-end;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .overlay-content {
+    display: flex;
+    flex-direction: column;
+    padding: 4rem;
+    gap: 10px;
+  }
+  .swiper-slide {
+    position: relative;
+  }
+  .slide-title {
+    font-family: var(--font-heading-family);
+    font-size: var(--heading-font-size);
+  }
+  .slide-subtitle {
+    font-size: var(--subtitle-font-size);
+  }
+  .btn.slide-btn {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 30px 10px 30px;
+    border-radius: 50px;
+    text-decoration: none !important;
+    font-family: var(--font-body-family);
+    letter-spacing: -0.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    font-size: var(--button-font-size);
+
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: 2px solid var(--btn-bg);
+    transition: color .3s ease, border-color .3s ease, padding-right .25s ease;
+  }
+
+  .btn.slide-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--btn-fg); /* reverse bg on hover */
+    transform: scaleX(0);
+    transform-origin: left center; /* animate right → left */
+    transition: transform .35s ease;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .btn.slide-btn .btn-label {
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn.slide-btn .btn-arrow {
+    position: absolute;
+    right: 20px; /* ⬅ spacing from button edge */
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity .25s ease, transform .25s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .btn.slide-btn:hover,
+  .btn.slide-btn:focus-visible {
+    color: var(--btn-bg);
+    border-color: #fff; /* white border on hover */
+    padding-right: 54px; /* ⬅ expand to keep same gap when arrow slides in */
+  }
+
+  .btn.slide-btn:hover::before,
+  .btn.slide-btn:focus-visible::before {
+    transform: scaleX(1);
+    background: var(--btn-fg); /* keep reverse color fill */
+  }
+
+  .btn.slide-btn:hover .btn-arrow,
+  .btn.slide-btn:focus-visible .btn-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn.slide-btn,
+    .btn.slide-btn::before,
+    .btn.slide-btn .btn-arrow {
+      transition: none;
+    }
+  }
+  .dante-video--desktop { display: block; }
+  .dante-video--mobile  { display: none;  }
+  .swiper-pagination {
+    z-index: 1;
+  }
+  span.swiper-pagination-bullet {
+    background: #fff;
+  }
+  span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+    background: #fff;
+  }
+  @media screen and (max-width: 989px) {
+    .swiper-container {
+      margin-top: calc(var(--swiper-margin-top) / 3);
+      margin-bottom: calc(var(--swiper-margin-bottom) / 3);
+      margin-left: calc(var(--swiper-margin-left) / 3);
+      margin-right: calc(var(--swiper-margin-right) / 3);
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .slide-title {
+      font-size: calc(var(--heading-font-size) / 1.5);
+    }
+    .slide-subtitle {
+      font-size: calc(var(--subtitle-font-size) / 1.5);
+    }
+    .btn.slide-btn {
+      font-size: calc(var(--button-font-size) / 1.5);
+    }
+    .slide-overlay[class*="mobile-position-"] {
+      justify-content: unset;
+      align-items: unset;
+      text-align: unset;
+    }
+    .slide-overlay.mobile-position-top-left    { justify-content: flex-start; align-items: flex-start; text-align: left; }
+    .slide-overlay.mobile-position-top-center  { justify-content: center;     align-items: flex-start; text-align: center; }
+    .slide-overlay.mobile-position-top-right   { justify-content: flex-end;   align-items: flex-start; text-align: right; }
+
+    .slide-overlay.mobile-position-middle-left   { justify-content: flex-start; align-items: center; text-align: left; }
+    .slide-overlay.mobile-position-middle-center { justify-content: center;     align-items: center; text-align: center; }
+    .slide-overlay.mobile-position-middle-right  { justify-content: flex-end;   align-items: center; text-align: right; }
+
+    .slide-overlay.mobile-position-bottom-left   { justify-content: flex-start; align-items: flex-end; text-align: left; }
+    .slide-overlay.mobile-position-bottom-center { justify-content: center;     align-items: flex-end; text-align: center; }
+    .slide-overlay.mobile-position-bottom-right  { justify-content: flex-end;   align-items: flex-end; text-align: right; }
+
+    .slide-overlay[class*="position-"]:not([class*="mobile-position-"]) {
+      justify-content: unset !important;
+      align-items: unset !important;
+      text-align: unset !important;
+    }
+    .overlay-content {
+      display: flex;
+      flex-direction: column;
+      padding: 4rem 2rem;
+      gap: 10px;
+    }
+    .swiper-container {
+      margin: 0px !important;
+    }
+    .dante-video--desktop {
+      display: none !important;
+    }
+    .dante-video--mobile  {
+      display: block !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Dante Swiper Banner",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top margin (rem)",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom margin (rem)",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_left",
+      "label": "Left margin (rem)",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_right",
+      "label": "Right margin (rem)",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "slide_radius",
+      "label": "Slide border radius (px)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "transition",
+      "label": "Transition",
+      "options": [
+        { "value": "slide", "label": "Slide" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "cube", "label": "Cube" },
+        { "value": "coverflow", "label": "Coverflow" },
+        { "value": "flip", "label": "Flip" }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "select",
+      "id": "timing",
+      "label": "Speed (ms)",
+      "options": [
+        { "value": "300", "label": "300ms" },
+        { "value": "500", "label": "500ms" },
+        { "value": "1000", "label": "1000ms" },
+        { "value": "2000", "label": "2000ms" }
+      ],
+      "default": "500"
+    },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay", "default": false },
+    { "type": "checkbox", "id": "pagination_enable", "label": "Pagination", "default": true },
+    { "type": "checkbox", "id": "navigation_enable", "label": "Navigation arrows", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Add Slide",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ],
+          "default": "image"
+        },
+        { "type": "image_picker", "id": "image_desktop", "label": "Desktop image" },
+        { "type": "image_picker", "id": "image_mobile", "label": "Mobile image" },
+        { "type": "video", "id": "video_file", "label": "Video file" },
+        { 
+          "type": "video", 
+          "id": "video_file_mobile", 
+          "label": "Mobile video file (optional)" 
+        },
+        { "type": "checkbox", "id": "video_autoplay", "label": "Video autoplay", "default": false },
+        { "type": "checkbox", "id": "video_controls", "label": "Show video controls", "default": false },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Overlay position",
+          "options": [
+            { "value": "top-left", "label": "Top left" },
+            { "value": "top-center", "label": "Top center" },
+            { "value": "top-right", "label": "Top right" },
+            { "value": "middle-left", "label": "Middle left" },
+            { "value": "middle-center", "label": "Middle center" },
+            { "value": "middle-right", "label": "Middle right" },
+            { "value": "bottom-left", "label": "Bottom left" },
+            { "value": "bottom-center", "label": "Bottom center" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ],
+          "default": "middle-center"
+        },
+        {
+          "type": "select",
+          "id": "position_mobile",
+          "label": "Mobile overlay position",
+          "options": [
+            { "value": "top-left", "label": "Top left" },
+            { "value": "top-center", "label": "Top center" },
+            { "value": "top-right", "label": "Top right" },
+            { "value": "middle-left", "label": "Middle left" },
+            { "value": "middle-center", "label": "Middle center" },
+            { "value": "middle-right", "label": "Middle right" },
+            { "value": "bottom-left", "label": "Bottom left" },
+            { "value": "bottom-center", "label": "Bottom center" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ],
+          "info": "Only affects mobile layout",
+          "default": "middle-center"
+        },
+        {
+          "type": "header",
+          "content": "Heading Settings"
+        },
+        { 
+          "type": "textarea", 
+          "id": "title_text", 
+          "label": "Title text" 
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size",
+          "label": "Heading font size (rem)",
+          "min": 1,
+          "max": 10,
+          "step": 0.1,
+          "default": 5
+        },
+        {
+          "type": "range",
+          "id": "heading_line_height",
+          "label": "Heading line spacing",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "default": 1.2
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "radio",
+          "id": "heading_align",
+          "label": "Heading text alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_top",
+          "label": "Heading top spacing (px)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_bottom",
+          "label": "Heading bottom spacing (px)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Subtitle Settings"
+        },
+        { 
+          "type": "textarea", 
+          "id": "subtitle_text", 
+          "label": "Subtitle text" 
+        },
+        {
+          "type": "range",
+          "id": "subtitle_font_size",
+          "label": "Subtitle font size (rem)",
+          "min": 0.5,
+          "max": 5,
+          "step": 0.1,
+          "default": 1.5
+        },
+        {
+          "type": "range",
+          "id": "subtitle_line_height",
+          "label": "Subtitle line spacing",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "default": 1.4
+        },
+        {
+          "type": "color",
+          "id": "subtitle_color",
+          "label": "Subtitle color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "radio",
+          "id": "subtitle_align",
+          "label": "Subtitle text alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "subtitle_margin_top",
+          "label": "Subtitle top spacing (px)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "subtitle_margin_bottom",
+          "label": "Subtitle bottom spacing (px)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Button Settings"
+        },
+        { "type": "text", 
+          "id": "button_text", 
+          "label": "CTA Link Text" 
+        },
+        { "type": "url", 
+          "id": "button_url", 
+          "label": "CTA link" 
+        },
+        {
+          "type": "range",
+          "id": "button_font_size",
+          "label": "Button font size (rem)",
+          "min": 0.5,
+          "max": 3,
+          "step": 0.1,
+          "default": 1
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button text color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "button_bg_color",
+          "label": "Button background color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "radio",
+          "id": "button_align",
+          "label": "Button alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "button_margin_top",
+          "label": "Button top spacing (px)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "button_margin_bottom",
+          "label": "Button bottom spacing (px)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Dante Swiper Banner", "category": "WJ Dante" }]
+}
+{% endschema %}

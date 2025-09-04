@@ -1,0 +1,312 @@
+/* CUSTOM FONTS */
+
+@import url("https://use.typekit.net/wtt0twz.css");
+
+@font-face {
+    src: url('https://cdn.shopify.com/s/files/1/0628/7920/3544/files/American_Captain.otf?v=1756405007');
+    font-family: 'American-Captain';
+}
+
+/* SET FONTS GLOBALLY */
+
+:root {
+    --font-body-family: 'interstate', sans-serif !important;
+    --font-heading-family: 'interstate', sans-serif !important;
+}
+
+/* GENERAL */
+
+a, a:hover {
+    text-decoration: none !important;
+}
+.title {
+  text-transform: capitalize;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+}
+
+/* DANTE UDPATE */
+
+header {
+    max-width: 2000px !important;
+}
+
+.card .card__inner .card__media {
+    margin-bottom: 0 !important;
+}
+.product-card-wrapper .card__content.card-footer::before {
+  background: rgb(0 0 0 / 58%) !important;
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.product-card-wrapper .quick-add__submit {
+  background: #d40100 !important;
+}
+.list-social {
+  justify-content: flex-start !important;
+}
+
+/* VIDEO PLAYER */
+
+#yottie_1 .yottie-widget-video {
+  background: transparent !important;
+}
+#yottie_1 .yottie-widget-feed-section-slide {
+  background: transparent !important;
+}
+#yottie_1 .yottie-widget-feed {
+  background: transparent !important;
+}
+#yottie_1 .yottie-widget-nav {
+  background: transparent !important;
+}
+#yottie_1 .yottie-widget-header {
+  background: transparent !important;
+}
+.yottie-widget-header-channel-title a {
+  color: #faeb5e !important;
+  font-family: "American-Captain" !important;
+  font-size: 3rem !important;
+  overflow: visible !important;
+}
+.yottie-widget-header-channel-properties span {
+  color: #fff !important;
+  font-size: 1.5rem !important;
+}
+.yottie-widget-video-info a {
+  color: #d40100 !important;
+  font-family: "American-Captain" !important;
+  font-size: 2rem !important;
+  overflow: visible !important;
+}
+.yottie-widget-video-info-passed-time {
+  color: #fff !important;
+}
+.yottie-widget-video-info-caption,
+.yottie-widget-video-info-caption a {
+  color: #fff !important;
+}
+.yottie-widget-video-info-properties {
+  color: #fff !important;
+}
+#yottie_1 .yottie-widget-video-info-properties-item {
+  color: #fff !important;
+}
+
+.product-form__buttons {
+    max-width: 100% !important;
+}
+.product-form__submit {
+  background: #d40100;
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+.product-form__submit::after {
+  display: none;
+}
+.product__column-sticky {
+    top: 130px !important;
+}
+.list-menu__item span {
+  font-family: 'American-Captain';
+  font-size: 2.5rem;
+  color: #fff;
+  line-height: 1;
+}
+.product-card-wrapper .card__heading a {
+  font-family: 'American-Captain';
+  font-size: 2.75rem;
+  line-height: 1;
+}
+.title {
+  font-family: 'American-Captain';
+  font-size: 7rem;
+  text-align: center;
+  line-height: 1;
+}
+.product__title>* {
+  font-family: 'American-Captain';
+  font-size: 5.5rem;
+  line-height: 1;
+  color: #ffffff;
+}
+variant-selects legend.form__label, .product-form__quantity .form__label {
+  font-size: 1.75rem;
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+.related-products__heading {
+  font-family: 'American-Captain';
+  font-size: 5rem;
+  text-align: center;
+  line-height: 1;
+}
+h2.footer-block__heading {
+  font-family: 'American-Captain';
+  font-size: 3rem;
+  line-height: 1;
+}
+.wj-sizechart-btn span {
+  font-family: 'interstate' !important;
+  font-size: 1.75rem !important;
+}
+h1.main-page-title, .collection-hero__title {
+  font-family: 'American-Captain';
+  font-size: 6rem;
+  line-height: 1;
+  text-align: center;
+}
+.cart-count-bubble {
+  background-color: #d40100;
+}
+.bkg-static {
+  background-size: cover !important;
+  background: url(https://cdn.shopify.com/s/files/1/0628/7920/3544/files/black-fabric-bkg.png?v=1756332623);
+  display: block !important;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  position: fixed;
+}
+.card-wrapper {
+  background: #be0003;
+}
+.card.card--standard.card--media {
+  height: calc(100% - 61px);
+}
+footer {
+    max-width: 2000px !important;
+    margin: auto;
+}
+.footer__content-top {
+    max-width: 100% !important;
+}
+.product__info-wrapper.grid__item {
+  padding: 20px 20px 0 40px !important;
+}
+product-recommendations {
+  max-width: 100% !important;
+}
+
+@media screen and (min-width: 750px) {
+  .page-width {
+    padding: 0;
+  }
+  .product__media-list {
+    gap: 0 !important;
+  }
+}
+
+@media (min-width: 989px) {
+  .product-media-container {
+    width: 100% !important;
+  }
+  .product__media-list {
+    flex-direction: column;
+  }
+  .grid--2-col-tablet .grid__item {
+    width: 100% !important;
+  }
+  .product--stacked .product__media-item {
+    max-width: 100% !important;
+  }
+  .product-media-container.constrain-height {
+    --constrained-height: 100% !important;
+  }
+  product-info .page-width {
+    margin: 0 !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 750px) {
+  product-info {
+    padding: 0 !important;
+  }
+  .product__media-item {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .slider.slider--mobile {
+    gap: 10px !important;
+    margin: 0 !important;
+    overflow-y: hidden !important;
+  }
+  .grid__item.product__media-wrapper {
+    padding: 0 !important;
+  }
+  .product .slider-buttons {
+    display: none !important;
+  }
+  .product__title h1 {
+    font-size: 4rem !important;
+  }
+  .product__info-wrapper.grid__item {
+    padding: 15px 0px !important;
+  }
+  .product-media-container.constrain-height.media-fit-contain {
+    --contained-width: 100%;
+    width: 100%;
+    height: 100%;
+    --ratio: 1 !important;
+    --preview-ratio: 1 !important;
+  }
+}
+
+
+/* HEADER */
+
+sticky-header.gradient {
+  background: #101010;
+}
+
+
+/* FOOTER */
+
+footer {
+    border: 0 !important;
+}
+.footer__content-bottom-wrapper {
+    justify-content: center !important;
+}
+.footer__content-bottom {
+    border: 0 !important;
+}
+
+
+/* COLLECTION */
+
+
+/* PDP */
+.accordion {
+  border-top: .1rem solid rgba(var(--color-foreground),1) !important;
+  border-bottom: .1rem solid rgba(var(--color-foreground),1) !important;
+  margin-top: 0 !important;
+  margin-bottom: -1px !important;
+}
+.accordion svg {
+  stroke: #fff;
+}
+.accordion summary {
+  padding: 18px 0 15px 0px !important;
+}
+button.share-button__button {
+  font-size: 1.45rem;
+  text-transform: uppercase;
+  font-family: 'interstate';
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+
+/* CONTACT */
+
+
+ /* POLICY */
